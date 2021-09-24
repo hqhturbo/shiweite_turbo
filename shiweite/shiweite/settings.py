@@ -75,8 +75,15 @@ WSGI_APPLICATION = 'shiweite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',# 数据库引擎
+        'NAME': 'shiweite_20_blog_db',# 数据库名称
+        'HOST': '127.0.0.1',# 数据库主机地址
+        'PORT': 3306,# 数据库端口号
+        'USER': 'shiweite_20_blog_user', # 用户名
+        'PASSWORD': '123456',# 密码
+        'CHARSET': 'utf8mb4'# 数据库字符编码
     }
 }
 
