@@ -14,21 +14,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
-# 1 导入系统logging
-import logging
+# # 1 导入系统logging
+# import logging
+#
+# # 2 创建日志署
+# logger = logging.getLogger('django_log')
+#
+# from django.http import HttpResponse
+#
+# def test_log(request):
+#     # 3 调用日志器记录日志
+#     logger.info('我是一条日志信息')
+#     return HttpResponse('日志记录测试')
 
-# 2 创建日志署
-logger = logging.getLogger('django_log')
-
-from django.http import HttpResponse
-
-def test_log(request):
-    # 3 调用日志器记录日志
-    logger.info('我是一条日志信息')
-    return HttpResponse('日志记录测试')
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', test_log)
+    # path('', test_log)
+    # include 参数1 要设置元组(urlconf_module,app_name). urlconf_module：子应用路由；app_name：子应用名
+    # include 参数2 namespace 设置命名空间。这里设置子应用名
+    path('',include(('users.urls','users'),namespace='users'))
 ]
