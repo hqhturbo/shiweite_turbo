@@ -140,7 +140,7 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379/0",  # 指定redis地址。0表示为0号库
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": "123456",
+            "PASSWORD": "12345",
         }
     },
     "session": {  # session
@@ -148,7 +148,7 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": "123456",
+            "PASSWORD": "12345",
         }
     },
 }
