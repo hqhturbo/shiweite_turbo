@@ -1,19 +1,17 @@
 import re
 from random import randint
 from users.models import User
-from django.http import HttpResponseBadRequest, JsonResponse,HttpResponseRedirect
-from django.shortcuts import render,HttpResponse
+from django.http import *
+from django.shortcuts import *
 from django.views import View
 from libs.captcha.captcha import captcha  # 导入图片验证码库
 from django_redis import get_redis_connection  # 导入redis包
 from libs.yuntongxun.sms import CCP
 from utils.response_code import RETCODE
+from django.contrib.auth import login
 # Create your views here.
 
 # 注册
-
-
-
 class RegisterView(View):
     def get(self,request):
         return render(request,'register.html')
@@ -56,8 +54,13 @@ class RegisterView(View):
         if redis_sms_code.decode() != sms_code:
             return HttpResponseBadRequest('短信验证码错误')
         # 3 保存注册信息
-        User.objects.create_user(username=mobile,mobile=mobile,password=password)
-        return HttpResponseRedirect('/')
+        user = User.objects.create_user(username=mobile,mobile=mobile,password=password)
+        login(request,user)
+        resp = redirect(reverse('home:index'))
+        resp.set_cookie('is_login',True)
+        resp.set_cookie('login_name',user.username)
+
+        return resp
 
 # 图片验证码
 class ImageView(View):
