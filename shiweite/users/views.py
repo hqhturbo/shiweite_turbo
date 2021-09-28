@@ -9,6 +9,7 @@ from django_redis import get_redis_connection  # 导入redis包
 from libs.yuntongxun.sms import CCP
 from utils.response_code import RETCODE
 from django.contrib.auth import login
+from django.contrib.auth import *
 # Create your views here.
 
 # 注册
@@ -136,3 +137,53 @@ class SmsCodeView(View):
         redis_conn.setex('sms:%s' % mobile, 60, sms_code)
         return JsonResponse({'code': RETCODE.OK, 'errmsg': '验证码发送成功'})
 
+class LoginView(View):
+    def get(self,req):
+        return render(req,'login.html')
+    def post(self,req):
+        '''
+           实现思路：
+           1、接收提交参数
+           2、验证参数
+            2-1、手机号码是否符合规则
+            2-2、密码是否符合规则
+           3、用户认证登录
+           4、状态保持
+           5、根据用户选择的是否记住登录状态进行判断
+           6、设置cookie信息，为首页显示服务
+           7、跳转到首页
+           :param request:
+           :return:
+        '''
+        # 1、接收提交参数
+        mobile = req.POST.get('mobile')
+        password = req.POST.get('password')
+        remember = req.POST.get('remember')
+        # 2、验证参数
+        if not all([mobile,password]):
+            return render(req,'login.html',{'msg':'参数不齐全'})
+        # 2 - 1、手机号码是否符合规则
+        if not re.match('^1[3-9]\d{9}$',mobile):
+            return render(req, 'login.html', {'msg': '手机号码格式不正确'})
+        # 2 - 2、密码是否符合规则
+        if not re.match('^[a-z0-9A-Z]{8,20}$',password):
+            return render(req, 'login.html', {'msg': '密码格式不正确'})
+        # 3、用户认证登录
+        # 使用django系统自带的用户认证代码将会返回一个user对象如果账号密码正确那么就返回该对象否则返回None
+        return_user=authenticate(mobile=mobile,password=password)
+        # 4、状态保持
+        login(req,return_user)
+
+        resp = redirect(reverse('home:index'))
+        # 5、根据用户选择的是否记住登录状态进行判断
+        if remember!='on': # 用户未勾选
+            req.session.set_expiry(0) #当浏览器关闭后清空session
+            resp.set_cookie('is_login',True)
+            resp.set_cookie('login_name',return_user.username)
+        else: #用户勾选
+            req.session.set_expiry(None)  # 设置session的过期时间为默认值。这个默认值是2周
+            resp.set_cookie('is_login', True,max_age=14*24*3600)
+            resp.set_cookie('login_name', return_user.username,max_age=14*24*3600)
+        # 6、设置cookie信息，为首页显示服务
+
+        return resp

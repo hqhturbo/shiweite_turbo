@@ -1,6 +1,5 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
 """
+# -*- coding: utf-8 -*-
 -------------------------------------------------
 # @Project  :shiweite
 # @File     :urls.py
