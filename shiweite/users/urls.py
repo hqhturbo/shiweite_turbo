@@ -10,6 +10,7 @@ urlpatterns = [
     # 图片验证码路由
     path('imagecode/',ImageView.as_view(),name='imagecode'),
     path('smscode/', SmsCodeView.as_view(),name='smcode'),
-    path('login/', LoginView.as_view(),name='login')
+    path('login/', LoginView.as_view(),name='login'),
+    path('logout/', LogoutView.as_view(),name='logout')
 ]
 
