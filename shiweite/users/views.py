@@ -196,6 +196,12 @@ class LoginView(View):
 
         resp = redirect(reverse('home:index'))
         # 5、根据用户选择的是否记住登录状态进行判断
+
+        next_page = req.GET.get('next')
+        if next_page:
+            resp = redirect(next_page)
+        else:
+            resp = redirect(reverse('home:index'))
         if remember != 'on':  # 用户未勾选
             req.session.set_expiry(0)  # 当浏览器关闭后清空session
             resp.set_cookie('is_login', True)
@@ -307,6 +313,8 @@ class ForgetPasswordView(View):
 
 class UserCenterView(LoginRequiredMixin,View):
     def get(self,req):
+        # if not req.user.is_authenticated:
+        #     return redirect(reverse('users:login'))
         userinfo = req.user
         context = {
             'username':userinfo.username,
