@@ -311,6 +311,7 @@ class ForgetPasswordView(View):
         # 7、返回响应
         return resp
 
+# 个人中心
 class UserCenterView(LoginRequiredMixin,View):
     def get(self,req):
         # if not req.user.is_authenticated:
@@ -359,3 +360,8 @@ class UserCenterView(LoginRequiredMixin,View):
         resp.set_cookie('login_name',userinfo.username)
         # 5、返回相应
         return resp
+
+# 写博客视图
+class WriteBlogView(View):
+    def get(self,req):
+        return render(req,'writeblog.html')
