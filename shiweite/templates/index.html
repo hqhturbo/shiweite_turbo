@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>好看的双栏博客</title>
-    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/css/cl-css.css" rel="stylesheet">
-    <link href="../static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/highlight/styles/railscasts.css">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/cl-css.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'highlight/styles/railscasts.css' %}">
 </head>
 <body>
 <div class="cl-header container-fluid" id="app">
@@ -47,7 +47,8 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="display: block"
                              v-show="show_menu">
                             <a class="dropdown-item" href="../static/write_blog.html">写文章 </a>
-                            <a class="dropdown-item" href='../static/center.html'>个人信息 </a>
+{#                            <a class="dropdown-item" href='../static/center.html'>个人信息 </a>#}
+                            <a class="dropdown-item" href='{% url 'users:usercenter' %}'>个人信息 </a>
                             <a class="dropdown-item" href='{% url 'users:logout' %}'> 退出登录</a>
                         </div>
                     </li>
@@ -77,15 +78,15 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img class="d-block w-100" src="../static/temporary-img/recommended.jpg"
+                                <img class="d-block w-100" src="{% static 'temporary-img/recommended.jpg' %}"
                                      alt="First slide">
                             </div>
                             <div class="carousel-item">
-                                <img class="d-block w-100" src="../static/temporary-img/recommended.jpg"
+                                <img class="d-block w-100" src="{% static 'temporary-img/recommended.jpg' %}"
                                      alt="Second slide">
                             </div>
                             <div class="carousel-item">
-                                <img class="d-block w-100" src="../static/temporary-img/recommended.jpg"
+                                <img class="d-block w-100" src="{% static 'temporary-img/recommended.jpg' %}"
                                      alt="Third slide">
                             </div>
                         </div>
@@ -105,12 +106,12 @@
                 </div>
                 <div class="recommend-bottom">
                     <div class="recommend-item">
-                        <a href="../static/calmlog-details.html"><img src="../static/temporary-img/recommended-left.jpg"
+                        <a href="../static/calmlog-details.html"><img src="{% static 'temporary-img/recommended-left.jpg' %}"
                                                                       class="img-fluid" alt=""></a>
                     </div>
                     <div class="recommend-item">
                         <a href="../static/calmlog-details.html"><img
-                                src="../static/temporary-img/recommended-right.jpg" class="img-fluid" alt=""></a>
+                                src="{% static 'temporary-img/recommended-right.jpg' %}" class="img-fluid" alt=""></a>
                     </div>
                 </div>
 

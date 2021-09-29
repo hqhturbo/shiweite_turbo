@@ -8,9 +8,22 @@ from libs.captcha.captcha import captcha  # 导入图片验证码库
 from django_redis import get_redis_connection  # 导入redis包
 from libs.yuntongxun.sms import CCP
 from utils.response_code import RETCODE
-from django.contrib.auth import login
 from django.contrib.auth import *
+from django.contrib.auth.mixins import LoginRequiredMixin
+'''
+    LoginRequiredMixin使用方法：
+    1、待验证的视图需要继承该类即可，它会自动验证身份信息
+    2、如果用户未登录，那么就是匿名用户，当访问该视图时，会自动进行跳转到默认登录地址：accounts/login/?next=/usercenter/
+    3、我们需要在setting.py中配置默认登录地址即可 
+    4、在登录视图的post方法中，判断next有值跳转
+'''
 
+
+
+# 1 导入系统logging
+import logging
+# 2 创建日志署
+logger = logging.getLogger('django_log')
 
 # Create your views here.
 
@@ -66,7 +79,6 @@ class RegisterView(View):
 
         return resp
 
-
 # 图片验证码
 class ImageView(View):
     def get(self, request):
@@ -93,7 +105,6 @@ class ImageView(View):
         redis_conn.setex(name='img:%s' % uuid, time=300, value=text)
         # 5、返回图片给前端
         return HttpResponse(image, content_type='image/jpeg')
-
 
 # 短信验证码
 class SmsCodeView(View):
@@ -141,7 +152,6 @@ class SmsCodeView(View):
         # 4、保存短信验证码内容到redis中,保存时间1分钟
         redis_conn.setex('sms:%s' % mobile, 60, sms_code)
         return JsonResponse({'code': RETCODE.OK, 'errmsg': '验证码发送成功'})
-
 
 # 登录
 class LoginView(View):
@@ -198,7 +208,6 @@ class LoginView(View):
 
         return resp
 
-
 # 退出
 class LogoutView(View):
 
@@ -220,11 +229,6 @@ class LogoutView(View):
         resp.delete_cookie('login_name')
         # 3、跳转到首页
         return resp
-
-import logging
-
-# 2 创建日志署
-logger = logging.getLogger('django_log')
 
 # 忘记密码
 class ForgetPasswordView(View):
@@ -299,4 +303,51 @@ class ForgetPasswordView(View):
         # 6、进行页面跳转，跳转到登录页面
         resp = redirect(reverse('users:login'))
         # 7、返回响应
+        return resp
+
+class UserCenterView(LoginRequiredMixin,View):
+    def get(self,req):
+        userinfo = req.user
+        context = {
+            'username':userinfo.username,
+            'mobile':userinfo.mobile,
+            'avatar': userinfo.avatar.url if userinfo.avatar else None,
+            'user_desc':userinfo.user_desc
+        }
+        return render(req,'usercenter.html',context=context)
+    def post(self,req):
+        '''
+            实现思路：
+            1、接收用户参数
+            2、将用户参数更新到数据库
+            3、更新cookie中的username
+            4、刷新当前页面（重定向操作）
+            5、返回相应
+            :param request:
+            :return:
+        '''
+        # 获取已登陆用户信息
+        userinfo = req.user
+        # 1、接收用户参数
+        # 获取用户提交的用户名，如果没有就将已登录的用户名赋值
+        username = req.POST.get('username')
+        # 获取用户提交的介绍，如果没有就将已登录的介绍赋值
+        user_desc = req.POST.get('desc',userinfo.username)
+        # 获取用户头像(如果没有图片保存地址，则会默认保存到项目的根目录下。否则需要在settting中进行配置地址)
+        avatar = req.FILES.get('avatar')
+        # 2、将用户参数更新到数据库
+        try:
+            userinfo.username = username
+            userinfo.user_desc = user_desc
+            if avatar:
+                userinfo.avatar = avatar
+            userinfo.save()
+        except Exception as e:
+            logger.error(e)
+            return HttpResponseBadRequest('修改用户信息失败')
+        # 3、更新cookie中的username
+        # 4、刷新当前页面（重定向）
+        resp = redirect(reverse('users:usercenter'))
+        resp.set_cookie('login_name',userinfo.username)
+        # 5、返回相应
         return resp

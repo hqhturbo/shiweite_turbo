@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from django.conf import settings
+from django.conf.urls.static import static
 # # 1 导入系统logging
 # import logging
 #
@@ -35,5 +36,6 @@ urlpatterns = [
     # include 参数1 要设置元组(urlconf_module,app_name). urlconf_module：子应用路由；app_name：子应用名
     # include 参数2 namespace 设置命名空间。这里设置子应用名
     path('',include(('users.urls','users'),namespace='users')),
-    path('',include(('home.urls','home'),namespace='home'))
+    path('',include(('home.urls','home'),namespace='home')),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

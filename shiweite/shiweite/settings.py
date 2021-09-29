@@ -127,6 +127,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#在工程的settings.py文件中，添加以下配置。
+LOGIN_URL = '/login/'
+# 图片统一路由
+MEDIA_URL = '/media/'
+# 配置影音图片地址
+MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
+
 # 配置静态文件加载路径
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]

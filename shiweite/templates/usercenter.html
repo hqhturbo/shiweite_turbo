@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/cl-css.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'highlight/styles/railscasts.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+     <script type="text/javascript" src="{% static 'vue/vue-2.5.16.js' %}"></script>
+    <script type="text/javascript" src="{% static 'vue/axios-0.18.0.min.js' %}"></script>
+
+     <script type="text/javascript" src="{% static 'js/host.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+</head>
+<body>
+
+<div class="cl-header container-fluid" id="app">
+    <div class="header-content container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="index.html">
+                <img src="../static/img/logo.jpg" width="144" height="72" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+    </div>
+</div>
+
+
+<form class="col-md-6 offset-md-3" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username">用户名</label>
+        <input type="text" class="form-control" id="username" name="username" value="{{ username }}">
+    </div>
+    <!--<br><h5 class="col-md-4">暂无头像</h5><br>-->
+    <br>
+    {% if avatar %}
+        <img src="{{ avatar }}"
+             style="max-width: 20%;" class="img-thumbnail"><br>
+    {% else %}
+        <img src="{% static '/img/portrait.png' %}"
+             style="max-width: 20%;" class="img-thumbnail"><br>
+    {% endif %}
+
+    <!-- avatar -->
+    <div class="form-group">
+        <label for="avatar">上传头像</label>
+        <input type="file" class="form-control-file" name="avatar" id="avatar">
+    </div>
+
+    <!-- phone -->
+    <div class="form-group">
+        <label for="phone">电话</label>
+        <input type="text" class="form-control" disabled="disabled" id="phone" name="phone" value="{{ mobile }}">
+    </div>
+    <!-- desc -->
+    <div class="form-group">
+        <label for="desc">简介</label>
+        <!-- 文本区域 -->
+        <textarea type="text" class="form-control" id="desc" name="desc" rows="5">{{ user_desc }}</textarea>
+    </div>
+    <!-- 提交按钮 -->
+    <button type="submit" class="btn btn-primary" style="margin-left: 12px">修改</button>
+</form>
+
+<div class="container-fluid cl-footer">
+    <div class="container">
+        <p class="cl-copyright">本设计由简.工作室荣誉出品</p>
+        <p class="cl-copyright">copyright @ 2017~2018 简.工作室（www.jeanstudio.cn）</p>
+    </div>
+</div>
+</body>
+</html>
