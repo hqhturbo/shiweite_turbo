@@ -15,5 +15,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
+    path('detail/',DetailView.as_view(),name='detail')
 ]
 

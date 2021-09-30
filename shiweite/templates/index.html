@@ -112,19 +112,37 @@
             {% for article in articles %}
                 <div class="cl-card">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12 cl-card-image"><a href="../static/calmlog-details.html"><img
+                        <div class="col-lg-3 col-md-4 col-sm-12 cl-card-image"><a href="{% url 'home:detail' %}?art_id={{ article.id }}"><img
                                 src="{{ article.avatar.url }}" class="img-fluid" alt=""></a></div>
                         <div class="col-lg-9 col-md-8 col-sm-12 cl-card-main">
-                            <h3 class="cl-card-main-title"><a 
-                                    href="../static/calmlog-details.html">{{ article.title }}</a></h3>
+                            <h3 class="cl-card-main-title"><a
+                                    href="{% url 'home:detail' %}?art_id={{ article.id }}">{{ article.title }}</a></h3>
                             <p class="cl-card-main-info">
                                 {{ article.sumary }}
                             </p>
-                            <p class="cl-card-more"><a href="../static/calmlog-details.html">阅读更多...</a></p>
+                            <p class="cl-card-more"><a href="{% url 'home:detail' %}?art_id={{ article.id }}">阅读更多...</a></p>
                         </div>
                     </div>
                 </div>
             {% endfor %}
+
+{#            {% for article in articles %}#}
+{#                <div class="cl-card">#}
+{#                    <div class="row">#}
+{#                        <div class="col-lg-3 col-md-4 col-sm-12 cl-card-image"><a href="{% url 'home:detail' id=article.id %}"><img#}
+{#                                src="{{ article.avatar.url }}" class="img-fluid" alt=""></a></div>#}
+{#                        <div class="col-lg-9 col-md-8 col-sm-12 cl-card-main">#}
+{#                            <h3 class="cl-card-main-title"><a #}
+{#                                    href="{% url 'home:detail' id=article.id %}">{{ article.title }}</a></h3>#}
+{#                            <p class="cl-card-main-info">#}
+{#                                {{ article.sumary }}#}
+{#                            </p>#}
+{#                            <p class="cl-card-more"><a href="{% url 'home:detail' id=article.id %}">阅读更多...</a></p>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% endfor %}#}
+
 
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">

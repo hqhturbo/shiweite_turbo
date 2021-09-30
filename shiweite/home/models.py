@@ -60,3 +60,9 @@ class Article(models.Model):
         ordering = ('-create_time',)
         verbose_name = '文章管理'
         verbose_name_plural = verbose_name
+
+class Comment(models.Model):
+    # 评论内容
+    content = models.TextField()
+    # 评论的文章
+    article = models.ForeignKey(Article,on_delete=models.SET_NULL,null=True)

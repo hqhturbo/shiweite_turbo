@@ -18,7 +18,7 @@ class IndexView(View):
         # 4、获取分页参数
         page_index = request.GET.get('page_index',1) #页码
         page_size = request.GET.get('page_size',2) #页容量
-        # 5、根据分页信息查询该分类下的所有文章数据
+        # 5、根据分类信息查询该分类下的所有文章数据
         articles = Article.objects.filter(category=category)
         # 6、创建分页器
         from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger #导入django分页插件
@@ -36,3 +36,30 @@ class IndexView(View):
         }
         print(list)
         return render(request, 'index.html',context=context)
+
+# 详情视图
+class DetailView(View):
+    def get(self,req):
+        # 1、获取文章id
+        art_id = req.GET.get('art_id')
+        # 2、根据文章id查询文章信息
+        try:
+            art = Article.objects.get(id=art_id)
+        except Article.DoesNotExist:
+            return render(req, '404.html')
+        # 2-1、浏览量的简单做法：只要被查询一次，那么就算一次访问
+        art.total_views += 1
+        art.save()
+        # 2-2、重新查询文章信息，按照浏览量降序排序（热门标签）
+        hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
+        # 2-3、最新文章
+        new_arts = Article.objects.order_by('-create_time')[:2]
+        # 3、返回页面
+
+        context = {
+            'article': art,
+            'hot_tags': hot_tags,
+            'new_arts': new_arts
+        }
+        return render(req,'details.html',context=context)
+
