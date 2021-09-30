@@ -54,12 +54,42 @@ class DetailView(View):
         hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
         # 2-3、最新文章
         new_arts = Article.objects.order_by('-create_time')[:2]
+        # 2-4、获取所有评论信息
+        comm = Comment.objects.filter(article=art).order_by('-created_time')
         # 3、返回页面
+
+        for c in comm:
+            print(c.user.avatar)
 
         context = {
             'article': art,
             'hot_tags': hot_tags,
-            'new_arts': new_arts
+            'new_arts': new_arts,
+            'comms':comm
         }
         return render(req,'details.html',context=context)
-
+    def post(self,req):
+        # 1、获取已登录用户信息
+        user = req.user
+        # 2、判断用户是否登录
+        if user and user.is_authenticated:
+            # 3、登录用户才可以接受form数据
+            # 3-1、接受评论数据
+            art_id = req.POST.get('art_id')
+            content = req.POST.get('content')
+            # 3-2、验证文章是否存在
+            try:
+                art = Article.objects.get(id=art_id)
+            except Article.DoesNotExist:
+                return HttpResponseRedirect('该文章不存在')
+            # 3-3、保存评论数据
+            Comment.objects.create(content=content,article=art,user=user)
+            # 3-4、修改评论数量
+            art.comments_count += 1
+            art.save()
+            # 刷新当前页面
+            req_url = req.path + '?art_id=' + art_id
+            return redirect(req_url)
+        else:
+            # 4、未登录用户则跳转到登录页面
+            return redirect(reverse('users:login'))
