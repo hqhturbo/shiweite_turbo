@@ -9,6 +9,7 @@ from django_redis import get_redis_connection  # 导入redis包
 from libs.yuntongxun.sms import CCP
 from utils.response_code import RETCODE
 from django.contrib.auth import *
+from home.models import ArticleCategory,Article
 from django.contrib.auth.mixins import LoginRequiredMixin
 '''
     LoginRequiredMixin使用方法：
@@ -362,6 +363,58 @@ class UserCenterView(LoginRequiredMixin,View):
         return resp
 
 # 写博客视图
-class WriteBlogView(View):
+class WriteBlogView(LoginRequiredMixin,View):
     def get(self,req):
-        return render(req,'writeblog.html')
+        # 获取博客分类信息
+        categories = ArticleCategory.objects.all()
+        context = {
+            'categories':categories
+        }
+        return render(req,'writeblog.html',context=context)
+
+    def post(self,req):
+        '''
+            实现思路：
+            1、接收数据
+            2、验证数据
+            3、数据入库
+            4、跳转到指定页面
+            :param request:
+            :return:
+        '''
+        # 1、接收数据
+        avatar = req.FILES.get('avatar')
+        title = req.POST.get('title')
+        category_id = req.POST.get('category_id')
+        tags= req.POST.get('tags')
+        sumary= req.POST.get('sumary')
+        content= req.POST.get('content')
+        user= req.user
+        print(avatar,title,category_id,tags,sumary,content,user)
+        # 2、验证数据
+        # 2-1、参数齐全验证
+        if not all([avatar,title,content,category_id,sumary]):
+            return HttpResponseBadRequest('参数不齐全')
+        # 2-2判断分类id
+        try:
+            category = ArticleCategory.objects.filter(pk=category_id).first()
+        except ArticleCategory.DoesNotExist:
+            return HttpResponseBadRequest('没有该分类信息')
+        # 3、数据入库
+        try:
+            Article.objects.create(
+                author=user,
+                avatar=avatar,
+                title=title,
+                category=category,
+                tags=tags,
+                sumary=sumary,
+                content=content,
+
+            )
+        except Exception as e:
+            logger.error(e)
+            return HttpResponseBadRequest('发布失败，请稍后再试')
+            # 4、跳转到指定页面
+        return redirect(reverse('home:index'))
+

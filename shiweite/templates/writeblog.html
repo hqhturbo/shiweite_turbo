@@ -5,8 +5,120 @@
     <meta charset="UTF-8">
     <title>写博客</title>
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/cl-css.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'highlight/styles/railscasts.css' %}">
+    <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}" type="text/javascript" charset="UTF-8"></script>
 </head>
 <body>
+<div class="cl-header container-fluid" id="app">
+    <div class="header-content container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="index.html">
+                <img src="../static/img/logo.jpg" width="144" height="72" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">首页 <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">教程</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">模板</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">日记</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">关于</a>
+                    </li>
+
+                    <!-- 如果用户已经登录，则显示用户名下拉框 -->
+                    <li class="nav-item dropdown" v-if="is_login">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="show_menu_click">[[username]]</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="display: block"
+                             v-show="show_menu">
+                            <a class="dropdown-item" href="{% url 'users:writeblog' %}">写文章 </a>
+                            <a class="dropdown-item" href='{% url 'users:usercenter' %}'>个人信息 </a>
+                            <a class="dropdown-item" href='{% url 'users:logout' %}'> 退出登录</a>
+                        </div>
+                    </li>
+                    <!-- 如果用户未登录，则显示登录按钮 -->
+                    <li class="nav-item" v-else>
+                        <a class="nav-link" href="{% url 'users:login' %}"> 登录</a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<div class="cl-cantainer container pt-5">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="avatar">标题插图</label>
+{#            <input type="file" name="avatar">#}
+            <input type="file" class="form-control-file" name="avatar" id="avatar">
+        </div>
+        <div class="form-group">
+            <label for="">文章标题</label>
+            <input type="text" class="form-control" id="" name="title" required class="form-control"/>
+        </div>
+
+        <!-- 文章栏目 -->
+        <div class="form-group">
+            <label for="column">栏目</label>
+            <select class="form-control" id="category_id" name="category_id">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="">标签</label>
+            <input type="text" id="" name="tags" required class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="">文章摘要</label>
+            <input type="text" id="" name="sumary" required class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="">文章正文</label>
+            <textarea name="content" id="editor1" rows="10" cols="80"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">完成</button>
+        </div>
+    </form>
+
+</div>
+<div class="container-fluid cl-footer">
+    <div class="container">
+        <p class="cl-copyright">本设计由简.工作室荣誉出品</p>
+        <p class="cl-copyright">copyright @ 2017~2018 简.工作室（www.jeanstudio.cn）</p>
+    </div>
+</div>
 
 </body>
+<script src="../static/jquery/jquery.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/highlight/highlight.pack.js"></script>
+<script src="../static/vue/vue-2.5.16.js"></script>
+<script src="../static/js/host.js"></script>
+<script src="../static/js/common.js"></script>
+<script src="../static/js/index.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>
+    CKEDITOR.replace('editor1')
+</script>
 </html>
