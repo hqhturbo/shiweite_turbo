@@ -11,6 +11,7 @@ from utils.response_code import RETCODE
 from django.contrib.auth import *
 from home.models import ArticleCategory,Article
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 '''
     LoginRequiredMixin使用方法：
     1、待验证的视图需要继承该类即可，它会自动验证身份信息
@@ -18,8 +19,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
     3、我们需要在setting.py中配置默认登录地址即可 
     4、在登录视图的post方法中，判断next有值跳转
 '''
-
-
 
 # 1 导入系统logging
 import logging

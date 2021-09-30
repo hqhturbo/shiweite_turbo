@@ -17,13 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-# # 1 导入系统logging
+# 1 导入系统logging
 # import logging
-#
-# # 2 创建日志署
+# #
+# # # 2 创建日志署
 # logger = logging.getLogger('django_log')
 #
-# from django.http import HttpResponse
+
 #
 # def test_log(request):
 #     # 3 调用日志器记录日志

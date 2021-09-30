@@ -201,7 +201,7 @@ LOGGING = {
         'django_log': { # 定义了一个名为django的日志器
             'handlers': ['console', 'file'], # 可以同时向终端与文件中输出日志
             'propagate': True, # 是否继续传递日志信息
-            'level': 'INFO', # 日志器接收的最低日志级别
+            'level': 'ERROR', # 日志器接收的最低日志级别
         },
     }
 }
