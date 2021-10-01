@@ -1,4 +1,4 @@
-import re
+import re,json
 from random import randint
 from users.models import User
 from django.http import *
@@ -340,6 +340,8 @@ class UserCenterView(LoginRequiredMixin,View):
         # 1、接收用户参数
         # 获取用户提交的用户名，如果没有就将已登录的用户名赋值
         username = req.POST.get('username')
+
+
         # 获取用户提交的介绍，如果没有就将已登录的介绍赋值
         user_desc = req.POST.get('desc',userinfo.username)
         # 获取用户头像(如果没有图片保存地址，则会默认保存到项目的根目录下。否则需要在settting中进行配置地址)

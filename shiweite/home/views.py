@@ -28,20 +28,28 @@ class IndexView(View):
         except PageNotAnInteger:
             list = pages.page(1) #如果用户输入的页面不是整数时，显示第1页的内容
         # 组织数据传递给模板
+
+        hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
+        # 2-3、最新文章
+        new_arts = Article.objects.order_by('-create_time')[:2]
         context = {
             'categories':categories,
             'category':category,
             'articles':list,
-            'cat_id':cat_id
+            'cat_id':cat_id,
+            'hot_tags': hot_tags,
+            'new_arts': new_arts,
         }
-        print(list)
-        return render(request, 'index.html',context=context)
+        resp = render(request, 'index.html',context=context)
+        resp.set_cookie('cat_id',cat_id)
+        return resp
 
 # 详情视图
 class DetailView(View):
     def get(self,req):
         # 1、获取文章id
         art_id = req.GET.get('art_id')
+        categories = ArticleCategory.objects.all()
         # 2、根据文章id查询文章信息
         try:
             art = Article.objects.get(id=art_id)
@@ -57,11 +65,8 @@ class DetailView(View):
         # 2-4、获取所有评论信息
         comm = Comment.objects.filter(article=art).order_by('-created_time')
         # 3、返回页面
-
-        for c in comm:
-            print(c.user.avatar)
-
         context = {
+            'categories':categories,
             'article': art,
             'hot_tags': hot_tags,
             'new_arts': new_arts,

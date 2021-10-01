@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/cl-css.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'highlight/styles/railscasts.css' %}">
+</head>
+<body>
+<div id="app">
+{#    导航栏    navdar navbar-expand-lg navbar-light#}
+    <div class="cl-header container-fluid" >
+    <div class="header-content container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="index.html">
+                <img src="../static/img/logo.jpg" width="144" height="72" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        {% for cat in categories %}
+                            {% if cat.id == category.id %}
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="/?cat_id={{ cat.id }}">{{ cat.title }}</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/?cat_id={{ cat.id }}">{{ cat.title }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="nav-item dropdown" v-if="is_login">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown" aria-expanded="false">
+                                [[username]]
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'users:writeblog' %}">写文章</a>
+                                <a class="dropdown-item" href="{% url 'users:usercenter' %}">个人信息</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'users:logout' %}">退出</a>
+                            </div>
+                        </li>
+                        <li class="nav-item" v-else>
+                            <a href="{% url 'users:login' %}" class="nav-link">登录/注册</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+{#内容#}
+<div class="cl-cantainer container">
+    <div class="row">
+{#        内容左侧#}
+        {% block content_left %}
+
+        {% endblock %}
+{#    内容右侧#}
+        <div class="col-md-3 cl-right">
+            <div class="right-card">
+
+                <div class="right-card-main">
+                    <div class="right-card-title">个人微信号</div>
+                    <div class="cl-code">
+                        <img src="../media/weixin.jpg" class="img-fluid" alt="">
+                        <p>关注作者</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-card">
+                <div class="right-card-main">
+                    <div class="right-card-title">最新文章</div>
+                    <ul class="right-recommended-list">
+
+                        {% for new_art in new_arts %}
+                            <li><a href="{% url 'home:detail' %}?art_id={{ new_art.id }}"><i class="fa fa-angle-right"
+                                                                                            aria-hidden="true"></i>{{ new_art.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="right-card">
+                <div class="right-card-title">热门标签</div>
+                <ul class="label">
+                    {% for hot_tag in hot_tags %}
+                        <li><a href="#">{{ hot_tag.tags }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+ <div class="container-fluid cl-footer">
+        <div class="container">
+            <p class="cl-copyright">本设计由简.工作室荣誉出品</p>
+            <p class="cl-copyright">copyright @ 2021 厚溥博客</p>
+        </div>
+    </div>
+</div>
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'highlight/highlight.pack.js' %}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% block js %}
+
+{% endblock %}
+<script src="{% static 'js/common.js' %}"></script>
+<script src="{% static 'js/host.js' %}"></script>
+<script src="{% static 'vue/vue-2.5.16.js' %}"></script>
+<script src="{% static 'vue/axios-0.18.0.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+</body>
+</html>
