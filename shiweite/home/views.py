@@ -1,7 +1,8 @@
 from django.shortcuts import *
 from django.views import View
 from home.models import *
-
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger #导入django分页插件
+import json
 # Create your views here.
 # 主页
 class IndexView(View):
@@ -21,7 +22,6 @@ class IndexView(View):
         # 5、根据分类信息查询该分类下的所有文章数据
         articles = Article.objects.filter(category=category)
         # 6、创建分页器
-        from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger #导入django分页插件
         pages = Paginator(articles,page_size) #对查询到的数据对象articles进行分页，设置超过指定页容量就分页
         try:
             list = pages.page(page_index) #获取当前页面的记录
