@@ -12,22 +12,29 @@
                         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                     </ol>
 
-{#                静态轮播图#}
+                    {#                静态轮播图#}
+
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img class="d-block w-100" src="../media/img-1625105303802b2731a93cee0533fe6117c2b5c70f19e.jpg"
-                                 alt="First slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="../media/img-162892855104046a5b1cc065e63e097870ca7da6821b3.jpg"
-                                 alt="Second slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="../media/img-1625774941489c306e70fdbf8e0018ded702e5321d94c.jpg"
-                                 alt="Third slide">
-                        </div>
+                        {% for new_art in new_arts %}
+                            {% for a in new_a %}
+                                {% if new_art.create_time == a.create_time %}
+                                    <div class="carousel-item active card " style="max-height: 550px">
+                                        <a href="{% url 'home:detail' %}?art_id={{ new_art.id }}">
+                                            <img class="img-fluid" src="{{ new_art.avatar.url }}" alt="">
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="carousel-item card  " style="max-height: 550px">
+                                        <a href="{% url 'home:detail' %}?art_id={{ new_art.id }}">
+                                            <img class="img-fluid" src="{{ new_art.avatar.url }}" alt="">
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+
                     </div>
-{#                轮播广告位 空#}
+                    {#                轮播广告位 空#}
                     <div class="carousel-inner">
                         <div class="carousel-item active">
                             <a href="{{ first_banner.link_url }}">
@@ -88,7 +95,8 @@
                         <p class="cl-card-main-info">
                             {{ article.sumary }}
                         </p>
-                        <p class="cl-card-more"><a href="{% url 'home:detail' %}?art_id={{ article.id }}">阅读更多...</a>
+                        <p class="cl-card-more"><a
+                                href="{% url 'home:detail' %}?art_id={{ article.id }}">阅读更多...</a>
                         </p>
                     </div>
                 </div>

@@ -52,7 +52,7 @@
                 <label for="inputEmail4">手机号码</label>
                 <input type="number" class="form-control" id="mobile" name="mobile" placeholder="请输入手机号"
                        autofocus="autofocus" required v-model="mobile" @blur="check_mobile">
-                <small class="form-text  ml-1">还没有账号，<a href="#" class="text-primary">注册新账号</a></small>
+                <small class="form-text  ml-1">还没有账号，<a href="{% url 'users:register' %}" class="text-primary">注册新账号</a></small>
                 <small class="form-text text-danger ml-1" v-show="mobile_error">[[mobile_error_message]]</small>
             </div>
             <div class="form-group">
@@ -75,8 +75,8 @@
     </div>
     <div class="container-fluid cl-footer">
         <div class="container">
-            <p class="cl-copyright">本设计由简.工作室荣誉出品</p>
-            <p class="cl-copyright">copyright @ 2017~2018 简.工作室（www.jeanstudio.cn）</p>
+            <p class="cl-copyright">本设计由然 ● 工作室荣誉出品</p>
+            <p class="cl-copyright">turbo @ 2017~2018 然 ● 工作室</p>
         </div>
     </div>
 </div>

@@ -211,7 +211,6 @@ class LoginView(View):
             resp.set_cookie('is_login', True, max_age=14 * 24 * 3600)
             resp.set_cookie('login_name', return_user.username, max_age=14 * 24 * 3600)
         # 6、设置cookie信息，为首页显示服务
-
         return resp
 
 # 退出
@@ -382,6 +381,8 @@ class WriteBlogView(LoginRequiredMixin,View):
             :param request:
             :return:
         '''
+        # ajax显示照片
+        image = req.FILES.get('image')
         # 1、接收数据
         avatar = req.FILES.get('avatar')
         title = req.POST.get('title')
@@ -418,3 +419,24 @@ class WriteBlogView(LoginRequiredMixin,View):
             # 4、跳转到指定页面
         return redirect(reverse('home:index'))
 
+
+
+def upload(request):
+    if request.method == 'POST':
+        image = request.FILES.get('image')
+        with open('media/' + image.name, 'wb') as f:
+            for line in image:
+                f.write(line)
+        print('------image=', image.name, '------------')
+
+        try:
+            data = {
+                'state': 1,
+                'url':'/media/' + image.name
+            }
+        except:
+            data = {'state': 0}
+
+        return JsonResponse(data)
+
+    return render(request, 'yibu.html')

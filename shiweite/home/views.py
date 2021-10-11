@@ -31,7 +31,8 @@ class IndexView(View):
 
         hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
         # 2-3、最新文章
-        new_arts = Article.objects.order_by('-create_time')[:2]
+        new_arts = Article.objects.order_by('-create_time')[:3]
+        new_a = Article.objects.order_by('-create_time')[:1]
         context = {
             'categories':categories,
             'category':category,
@@ -39,6 +40,7 @@ class IndexView(View):
             'cat_id':cat_id,
             'hot_tags': hot_tags,
             'new_arts': new_arts,
+            'new_a':new_a
         }
         resp = render(request, 'index.html',context=context)
         resp.set_cookie('cat_id',cat_id)

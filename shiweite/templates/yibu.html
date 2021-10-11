@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="../static/jquery/jquery.min.js"></script>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <div class="carousel-inner" id="uploadImgBtn">
+        <label>
+            <input class="uploadImg" type="file" name="image" id="image-input">
+        </label>
+        <div id="div1" class="card" style="max-height: 550px ;max-width: 550px"></div>
+    </div>
+
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#image-input").on("change", upload);
+    })
+    function upload() {
+        var formdata = new FormData();
+        formdata.append("image", $("#image-input")[0].files[0]);
+        formdata.append("csrfmiddlewaretoken", $("[name='csrfmiddlewaretoken']").val());
+        $.ajax({
+            processData: false,
+            contentType: false,
+            url: '/upload/',
+            type: 'post',
+            data: formdata,
+            dataType: "json",
+            success: function (arg) {
+                $('#div1').append(
+                    "<img class='img-fluid' src=' " + arg.url + " ' > "
+                )
+                if (arg.state == 1) {
+                    alert('上传成功！')
+                } else {
+                    alert('上传失败！')
+                }
+            }, error: function () {
+                alert("访问繁忙，请重试")
+            }
+        })
+    }
+
+</script>
+
+</body>
+</html>
