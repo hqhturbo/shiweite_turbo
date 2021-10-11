@@ -33,6 +33,14 @@ class IndexView(View):
         # 2-3、最新文章
         new_arts = Article.objects.order_by('-create_time')[:3]
         new_a = Article.objects.order_by('-create_time')[:1]
+
+        # if 'login_name' in request.COOKIES:
+        #     login_name = request.COOKIES.get('login_name')
+        #     username = json.loads(login_name)
+        #     print('username',username)
+        #     print('login_name',login_name)
+        #     return username
+
         context = {
             'categories':categories,
             'category':category,
@@ -40,7 +48,8 @@ class IndexView(View):
             'cat_id':cat_id,
             'hot_tags': hot_tags,
             'new_arts': new_arts,
-            'new_a':new_a
+            'new_a':new_a,
+            # 'username':username
         }
         resp = render(request, 'index.html',context=context)
         resp.set_cookie('cat_id',cat_id)

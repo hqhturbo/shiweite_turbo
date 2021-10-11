@@ -12,8 +12,8 @@
                         <h2 class="cl-artical-title">{{ article.title }}</h2>
                         <div class="cl-card-tag">
                             <div><span>作者：{{ article.author }}</span></div>
-                            <div><span>{{ article.total_views }}</span>人浏览 / <span>{{ article.comments_count }}</span>人评论
-                            </div>
+                            <div><span>{{ article.total_views }}</span>人浏览 / <span>{{ article.comments_count }}</span>人评论</div>
+                            <div><span>发布时间：{{ article.create_time }}</span></div>
                         </div>
                         <img src="{{ article.avatar.url }}" class="img-fluid" alt="">
                         <div class="cl-artical">

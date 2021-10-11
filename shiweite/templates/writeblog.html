@@ -51,12 +51,12 @@
         {% csrf_token %}
         <div class="form-group carousel-inner">
             <label for="avatar">标题插图</label>
-                        <input type="file" name="avatar">
+{#                        <input type="file" name="avatar">#}
 {#                        <input type="file" class="form-control-file" name="avatar" id="avatar">#}
-{#                <label>#}
-{#                    <input class="uploadImg" type="file" name="image" id="image-input">#}
-{#                </label>#}
-{#                <div id="div1" class="card" style="max-height: 550px ;max-width: 550px"></div>#}
+                <label>
+                    <input type="file" name="avatar" id="image-input">
+                </label>
+                <div id="div1" class="card" style="max-height: 550px ;max-width: 550px"></div>
 
         </div>
         <div class="form-group">
@@ -114,11 +114,12 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $("#image-input").on("change", upload);
+    $(function () {
+        $("#image-input").on("change", writeblog);
     })
-    function upload() {
+    function writeblog() {
         var formdata = new FormData();
+        {#formdata.append("image", $("#image-input").prop('files')[0]);#}
         formdata.append("image", $("#image-input")[0].files[0]);
         formdata.append("csrfmiddlewaretoken", $("[name='csrfmiddlewaretoken']").val());
         $.ajax({
@@ -129,10 +130,11 @@
             data: formdata,
             dataType: "json",
             success: function (arg) {
+                $('#div1').empty();
                 $('#div1').append(
                     "<img class='img-fluid' src=' " + arg.url + " ' > "
                 )
-                if (arg.state == 1) {
+                if (arg.state === 1) {
                     alert('上传成功！')
                 } else {
                     alert('上传失败！')

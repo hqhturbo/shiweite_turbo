@@ -1,4 +1,4 @@
-import re,json
+import re,json,os
 from random import randint
 from users.models import User
 from django.http import *
@@ -11,7 +11,7 @@ from utils.response_code import RETCODE
 from django.contrib.auth import *
 from home.models import ArticleCategory,Article
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from shiweite.settings import BASE_DIR,MEDIA_URL
 '''
     LoginRequiredMixin使用方法：
     1、待验证的视图需要继承该类即可，它会自动验证身份信息
@@ -202,13 +202,16 @@ class LoginView(View):
             resp = redirect(next_page)
         else:
             resp = redirect(reverse('home:index'))
+        # username = json.dumps(return_user.username)
         if remember != 'on':  # 用户未勾选
             req.session.set_expiry(0)  # 当浏览器关闭后清空session
             resp.set_cookie('is_login', True)
+            # resp.set_cookie('login_name', username)
             resp.set_cookie('login_name', return_user.username)
         else:  # 用户勾选
             req.session.set_expiry(None)  # 设置session的过期时间为默认值。这个默认值是2周
             resp.set_cookie('is_login', True, max_age=14 * 24 * 3600)
+            # resp.set_cookie('login_name', username, max_age=14 * 24 * 3600)
             resp.set_cookie('login_name', return_user.username, max_age=14 * 24 * 3600)
         # 6、设置cookie信息，为首页显示服务
         return resp
@@ -356,7 +359,9 @@ class UserCenterView(LoginRequiredMixin,View):
             return HttpResponseBadRequest('修改用户信息失败')
         # 3、更新cookie中的username
         # 4、刷新当前页面（重定向）
+        # username=json.dumps(userinfo.username)
         resp = redirect(reverse('users:usercenter'))
+        # resp.set_cookie('login_name',username)
         resp.set_cookie('login_name',userinfo.username)
         # 5、返回相应
         return resp
@@ -381,8 +386,6 @@ class WriteBlogView(LoginRequiredMixin,View):
             :param request:
             :return:
         '''
-        # ajax显示照片
-        image = req.FILES.get('image')
         # 1、接收数据
         avatar = req.FILES.get('avatar')
         title = req.POST.get('title')
@@ -391,7 +394,21 @@ class WriteBlogView(LoginRequiredMixin,View):
         sumary= req.POST.get('sumary')
         content= req.POST.get('content')
         user= req.user
-        print(avatar,title,category_id,tags,sumary,content,user)
+        # ajax显示照片
+        if avatar == None:
+            avatar = req.FILES.get('image')
+            with open('media/' + avatar.name, 'wb') as f:
+                for line in avatar:
+                    f.write(line)
+            try:
+                data = {
+                    'state': 1,
+                    'url': '/media/' + avatar.name
+                }
+                return JsonResponse(data)
+            except:
+                data = {'state': 0}
+                return JsonResponse(data)
         # 2、验证数据
         # 2-1、参数齐全验证
         if not all([avatar,title,content,category_id,sumary]):
@@ -411,32 +428,10 @@ class WriteBlogView(LoginRequiredMixin,View):
                 tags=tags,
                 sumary=sumary,
                 content=content,
-
             )
+            os.remove(BASE_DIR + MEDIA_URL + avatar.name)
         except Exception as e:
             logger.error(e)
             return HttpResponseBadRequest('发布失败，请稍后再试')
             # 4、跳转到指定页面
         return redirect(reverse('home:index'))
-
-
-
-def upload(request):
-    if request.method == 'POST':
-        image = request.FILES.get('image')
-        with open('media/' + image.name, 'wb') as f:
-            for line in image:
-                f.write(line)
-        print('------image=', image.name, '------------')
-
-        try:
-            data = {
-                'state': 1,
-                'url':'/media/' + image.name
-            }
-        except:
-            data = {'state': 0}
-
-        return JsonResponse(data)
-
-    return render(request, 'yibu.html')

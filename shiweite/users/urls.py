@@ -15,6 +15,5 @@ urlpatterns = [
     path('forgetpassword/', ForgetPasswordView.as_view(), name='forgetpassword'),
     path('usercenter/', UserCenterView.as_view(), name='usercenter'),
     path('writeblog/', WriteBlogView.as_view(), name='writeblog'),
-    path('upload/', upload, name='upload'),
 ]
 
