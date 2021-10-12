@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    主页
+{% endblock %}
+
 {% block content_left %}
     <div class="col-md-9 cl-left">
         <div class="recommend-index">
@@ -35,24 +39,24 @@
 
                     </div>
                     {#                轮播广告位 空#}
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <a href="{{ first_banner.link_url }}">
-                                <img class="d-block w-100" src="{{ first_banner.img.url }}"
-                                     alt="">
-                            </a>
-
-                        </div>
-                        {% for item in surplus_banners %}
-                            <div class="carousel-item">
-                                <a href="{{ item.link_url }}">
-                                    <img class="d-block w-100" src="{{ item.img.url }}"
-                                         alt="">
-                                </a>
-
-                            </div>
-                        {% endfor %}
-                    </div>
+{#                    <div class="carousel-inner">#}
+{#                        <div class="carousel-item active">#}
+{#                            <a href="{{ first_banner.link_url }}">#}
+{#                                <img class="d-block w-100" src="{{ first_banner.img.url }}"#}
+{#                                     alt="">#}
+{#                            </a>#}
+{##}
+{#                        </div>#}
+{#                        {% for item in surplus_banners %}#}
+{#                            <div class="carousel-item">#}
+{#                                <a href="{{ item.link_url }}">#}
+{#                                    <img class="d-block w-100" src="{{ item.img.url }}"#}
+{#                                         alt="">#}
+{#                                </a>#}
+{##}
+{#                            </div>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
 
 
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
@@ -69,16 +73,16 @@
 
 
             </div>
-            <div class="recommend-bottom">
-                <div class="recommend-item">
-                    <a href="#"><img src="../static/temporary-img/recommended-left.jpg"
-                                     class="img-fluid" alt=""></a>
-                </div>
-                <div class="recommend-item">
-                    <a href="#"><img src="../static/temporary-img/recommended-right.jpg"
-                                     class="img-fluid" alt=""></a>
-                </div>
-            </div>
+{#            <div class="recommend-bottom">#}
+{#                <div class="recommend-item">#}
+{#                    <a href="#"><img src="../static/temporary-img/recommended-left.jpg"#}
+{#                                     class="img-fluid" alt=""></a>#}
+{#                </div>#}
+{#                <div class="recommend-item">#}
+{#                    <a href="#"><img src="../static/temporary-img/recommended-right.jpg"#}
+{#                                     class="img-fluid" alt=""></a>#}
+{#                </div>#}
+{#            </div>#}
 
         </div>
 

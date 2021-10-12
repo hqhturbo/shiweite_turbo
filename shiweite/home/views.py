@@ -65,14 +65,16 @@ class DetailView(View):
         try:
             art = Article.objects.get(id=art_id)
         except Article.DoesNotExist:
-            return render(req, '404.html')
+            return render(req, '404.html',{
+                'context':'您访问的文章不存在'
+            })
         # 2-1、浏览量的简单做法：只要被查询一次，那么就算一次访问
         art.total_views += 1
         art.save()
         # 2-2、重新查询文章信息，按照浏览量降序排序（热门标签）
         hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
         # 2-3、最新文章
-        new_arts = Article.objects.order_by('-create_time')[:2]
+        new_arts = Article.objects.order_by('-create_time')[:3]
         # 2-4、获取所有评论信息
         comm = Comment.objects.filter(article=art).order_by('-created_time')
         # 3、返回页面
@@ -97,7 +99,9 @@ class DetailView(View):
             try:
                 art = Article.objects.get(id=art_id)
             except Article.DoesNotExist:
-                return HttpResponseRedirect('该文章不存在')
+                return render(req, '404.html', {
+                    'context': '您访问的文章不存在'
+                })
             # 3-3、保存评论数据
             Comment.objects.create(content=content,article=art,user=user)
             # 3-4、修改评论数量

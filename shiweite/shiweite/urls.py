@@ -13,8 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.views.static import serve as static_serve
+from django.contrib.staticfiles.views import serve #static静态文件
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
 # 1 导入系统logging
@@ -23,6 +26,8 @@ from django.conf.urls.static import static
 # # # 2 创建日志署
 # logger = logging.getLogger('django_log')
 #
+def return_static(request, path, insecure=True, **kwargs):
+    return serve(request, path, insecure, **kwargs)
 
 #
 # def test_log(request):
@@ -37,5 +42,8 @@ urlpatterns = [
     # include 参数2 namespace 设置命名空间。这里设置子应用名
     path('',include(('users.urls','users'),namespace='users')),
     path('',include(('home.urls','home'),namespace='home')),
+    path('',include(('errors.urls','errors'),namespace='errors')),
+    url(r'^static/(?P<path>.*)$', return_static, name='static'),
+    url(r'^media/(?P<path>.*)$', static_serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

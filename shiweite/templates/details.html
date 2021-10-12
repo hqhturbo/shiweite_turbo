@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    博客详情
+{% endblock %}
+{% load static %}
 {% block content_left %}
-
-
     <div class="col-md-9 cl-left">
 
         <div class="cl-cantainer container">
@@ -55,7 +57,7 @@
                                     {% if comm.user.avatar %}
                                         <img src="{{ comm.user.avatar.url }}" class="img-fluid rounded-circle" alt="">
                                     {% else %}
-                                        <img src="../static/img/portrait.png" alt="">
+                                        <img src="{% static 'img/portrait.png' %}" alt="">
                                     {% endif %}
                                 </div>
                                 <div class="comment-panel-content">

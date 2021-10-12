@@ -3,17 +3,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>用户中心</title>
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/cl-css.css' %}" rel="stylesheet">
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'highlight/styles/railscasts.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
 
-     <script type="text/javascript" src="{% static 'vue/vue-2.5.16.js' %}"></script>
+    <script type="text/javascript" src="{% static 'vue/vue-2.5.16.js' %}"></script>
     <script type="text/javascript" src="{% static 'vue/axios-0.18.0.min.js' %}"></script>
 
-     <script type="text/javascript" src="{% static 'js/host.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/host.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
 </head>
 <body>
@@ -41,21 +41,23 @@
     </div>
     <!--<br><h5 class="col-md-4">暂无头像</h5><br>-->
     <br>
-    {% if avatar %}
-        <img src="{{ avatar }}"
-             style="max-width: 20%;" class="img-thumbnail"><br>
-    {% else %}
-        <img src="{% static '/img/portrait.png' %}"
-             style="max-width: 20%;" class="img-thumbnail"><br>
-    {% endif %}
-
+    <!--<div id="div1">-->
+        {% if avatar %}
+            <img src="{{ avatar }}"
+                 style="max-width: 20%;" class="img-thumbnail"><br>
+        {% else %}
+            <img src="{% static '/img/portrait.png' %}"
+                 style="max-width: 20%;" class="img-thumbnail"><br>
+        {% endif %}
+    <!-- </div> -->
     <!-- avatar -->
     <div class="form-group">
         <label for="avatar">上传头像</label>
         <input type="file" class="form-control-file" name="avatar" id="avatar">
+        <!--<input type="file" class="form-control-file" name="avatar" id="image-input">-->
     </div>
 
-{#    <!-- phone -->#}
+    <!-- phone -->
     <div class="form-group">
         <label for="phone">电话</label>
         <input type="text" class="form-control" disabled="disabled" id="phone" name="phone" value="{{ mobile }}">
@@ -78,4 +80,37 @@
     </div>
 </div>
 </body>
+<!-- <script src="../static/jquery/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#image-input").on("change", usercenter);
+    })
+    function usercenter() {
+        var formdata = new FormData();
+        formdata.append("image", $("#image-input").prop('files')[0]);
+        formdata.append("image", $("#image-input")[0].files[0]);
+        formdata.append("csrfmiddlewaretoken", $("[name='csrfmiddlewaretoken']").val());
+        $.ajax({
+            processData: false,
+            contentType: false,
+            url: '/usercenter/',
+            type: 'post',
+            data: formdata,
+            dataType: "json",
+            success: function (arg) {
+                $('#div1').empty();
+                $('#div1').append(
+                    "<img style='max-width: 20%;' class='img-thumbnail' src=' " + arg.url + " ' > "
+                )
+                if (arg.state === 1) {
+                    alert('上传成功！')
+                } else {
+                    alert('上传失败！')
+                }
+            }, error: function () {
+                alert("访问繁忙，请重试")
+            }
+        })
+    }
+</script> -->
 </html>

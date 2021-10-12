@@ -348,6 +348,28 @@ class UserCenterView(LoginRequiredMixin,View):
         # 获取用户头像(如果没有图片保存地址，则会默认保存到项目的根目录下。否则需要在settting中进行配置地址)
         avatar = req.FILES.get('avatar')
         # 2、将用户参数更新到数据库
+        # # ajax显示照片
+        # print(avatar)
+        # if avatar == None:
+        #     avatar = req.FILES.get('image')
+        #     with open('media/' + avatar.name, 'wb') as f:
+        #         for line in avatar:
+        #             f.write(line)
+        #     try:
+        #         data = {
+        #             'state': 1,
+        #             'url': '/media/' + avatar.name
+        #         }
+        #         # ava = User.objects.filter(username=userinfo.username).first()
+        #         # avat = str(ava.avatar)
+        #         # print(BASE_DIR + MEDIA_URL + avat)
+        #         # if ava != None:
+        #         #     os.remove(BASE_DIR + MEDIA_URL + avat)
+        #         return JsonResponse(data)
+        #     except:
+        #         data = {'state': 0}
+        #         return JsonResponse(data)
+        #
         try:
             userinfo.username = username
             userinfo.user_desc = user_desc
@@ -356,7 +378,9 @@ class UserCenterView(LoginRequiredMixin,View):
             userinfo.save()
         except Exception as e:
             logger.error(e)
-            return HttpResponseBadRequest('修改用户信息失败')
+            return render(req, '404.html', {
+                'context': '修改用户信息失败'
+            })
         # 3、更新cookie中的username
         # 4、刷新当前页面（重定向）
         # username=json.dumps(userinfo.username)
@@ -412,12 +436,16 @@ class WriteBlogView(LoginRequiredMixin,View):
         # 2、验证数据
         # 2-1、参数齐全验证
         if not all([avatar,title,content,category_id,sumary]):
-            return HttpResponseBadRequest('参数不齐全')
+            return render(req, '404.html', {
+                'context': '参数不齐全'
+            })
         # 2-2判断分类id
         try:
             category = ArticleCategory.objects.filter(pk=category_id).first()
         except ArticleCategory.DoesNotExist:
-            return HttpResponseBadRequest('没有该分类信息')
+            return render(req, '404.html', {
+                'context': '没有该分类信息'
+            })
         # 3、数据入库
         try:
             Article.objects.create(
@@ -432,6 +460,8 @@ class WriteBlogView(LoginRequiredMixin,View):
             os.remove(BASE_DIR + MEDIA_URL + avatar.name)
         except Exception as e:
             logger.error(e)
-            return HttpResponseBadRequest('发布失败，请稍后再试')
+            return render(req, '404.html', {
+                'context': '发布失败，请稍后重试'
+            })
             # 4、跳转到指定页面
         return redirect(reverse('home:index'))
