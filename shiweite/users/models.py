@@ -1,9 +1,12 @@
 from django.db import models
 # 导入系统抽象类用户
 from django.contrib.auth.models import AbstractUser
-
+from django.utils import timezone
 
 # Create your models here.
+# advertising
+
+
 # 自定义用户类
 class User(AbstractUser):
     # 手机号

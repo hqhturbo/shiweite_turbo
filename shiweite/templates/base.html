@@ -10,6 +10,13 @@
     <link href="{% static 'css/cl-css.css' %}" rel="stylesheet">
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'highlight/styles/railscasts.css' %}">
+    <style>
+        .class1{
+            font-family:华文行楷;
+            font-size: 45px;
+            color: #8b98ab;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
@@ -18,8 +25,8 @@
     <div class="header-content container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="index.html">
-                <img src="../static/img/logo.jpg" width="144" height="72" alt="">
-            </a>
+                <img src="../static/img/lhr.jpg" width="75" height="75" alt="">
+            </a><span class="class1">筱宸</span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -50,7 +57,7 @@
                             </div>
                         </li>
                         <li class="nav-item" v-else>
-                            <a href="{% url 'users:login' %}" class="nav-link">登录/注册</a>
+                            <span class="nav-link"><a href="{% url 'users:login' %}" >登录</a>/<a  href="{% url 'users:register' %}">注册</a></span>
                         </li>
                     </ul>
                 </div>
@@ -70,10 +77,11 @@
             <div class="right-card">
 
                 <div class="right-card-main">
-                    <div class="right-card-title">个人微信号</div>
-                    <div class="cl-code">
-                        <img src="../media/weixin.jpg" class="img-fluid" alt="">
-                        <p>关注作者</p>
+                    <div style="font-family: Forte;font-size: 40px;text-align: center " class="right-card-title">turbo</div>
+                    <div style="font-family: 方正舒体;font-size: 45px" class="cl-code">
+                        <p>刘</p>
+                        <p>昊</p>
+                        <p>然</p>
                     </div>
                 </div>
             </div>
@@ -81,6 +89,12 @@
             <div class="right-card">
                 <div class="right-card-main">
                     <div class="right-card-title">最新文章</div>
+                        {% for new_art in new_arts %}
+                            {% if new_art.id == arts_max %}
+                                <div class="right-recommended"><a href="{% url 'home:detail' %}?art_id={{ new_art.id }}"><img src="{{ new_art.avatar.url }}" class="img-fluid" alt=""></a></div>
+                            {% endif %}
+                        {% endfor %}
+
                     <ul class="right-recommended-list">
 
                         {% for new_art in new_arts %}

@@ -14,7 +14,8 @@
                         <h2 class="cl-artical-title">{{ article.title }}</h2>
                         <div class="cl-card-tag">
                             <div><span>作者：{{ article.author }}</span></div>
-                            <div><span>{{ article.total_views }}</span>人浏览 / <span>{{ article.comments_count }}</span>人评论</div>
+                            <div><span>{{ article.total_views }}</span>人浏览 / <span>{{ article.comments_count }}</span>人评论
+                            </div>
                             <div><span>发布时间：{{ article.create_time }}</span></div>
                         </div>
                         <img src="{{ article.avatar.url }}" class="img-fluid" alt="">
@@ -27,16 +28,18 @@
                     <div class="recommend-panel">
                         <h4 class="right-card-title">相关文章</h4>
                         <div class="card-deck">
-                            <div class="card ll-panel">
-                                <a class="recommend-panel-link" href="details.html">
-                                    <div class="recommend-panel-top">
-                                        <img src="../static/temporary-img/list-image1.jpg" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="recommend-panel-bottom">
-                                        如何有效避免设计作品“空”？
-                                    </div>
-                                </a>
-                            </div>
+                            {% for corrtag in corrtags %}
+                                <div class="card ll-panel">
+                                    <a class="recommend-panel-link" href="{% url 'home:detail' %}?art_id={{ corrtag.id }}">
+                                        <div class="recommend-panel-top">
+                                            <img src="{{ corrtag.avatar.url }}" class="img-fluid" alt="">
+                                        </div>
+                                        <div class="recommend-panel-bottom">
+                                            {{ corrtag.sumary }}
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                     {#             文章评论#}

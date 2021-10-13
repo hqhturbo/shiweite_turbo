@@ -19,26 +19,23 @@
                     {#                静态轮播图#}
 
                     <div class="carousel-inner">
-                        {% for new_art in new_arts %}
-                            {% for a in new_a %}
-                                {% if new_art.create_time == a.create_time %}
-                                    <div class="carousel-item active card " style="max-height: 550px">
-                                        <a href="{% url 'home:detail' %}?art_id={{ new_art.id }}">
-                                            <img class="img-fluid" src="{{ new_art.avatar.url }}" alt="">
-                                        </a>
-                                    </div>
-                                {% else %}
-                                    <div class="carousel-item card  " style="max-height: 550px">
-                                        <a href="{% url 'home:detail' %}?art_id={{ new_art.id }}">
-                                            <img class="img-fluid" src="{{ new_art.avatar.url }}" alt="">
-                                        </a>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
+                        {% for adverti in advertis %}
+                            {% if adverti.id == adver_min %}
+                                <div class="carousel-item active card " style="max-height: 550px">
+                                    <a href="#">
+                                        <img class="img-fluid" src="{{ adverti.advertis.url }}" alt="">
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="carousel-item card  " style="max-height: 550px">
+                                    <a href="#">
+                                        <img class="img-fluid" src="{{ adverti.advertis.url }}" alt="">
+                                    </a>
+                                </div>
+                            {% endif %}
                         {% endfor %}
-
                     </div>
-                    {#                轮播广告位 空#}
+                    {#                                    轮播广告位 空#}
 {#                    <div class="carousel-inner">#}
 {#                        <div class="carousel-item active">#}
 {#                            <a href="{{ first_banner.link_url }}">#}
@@ -73,16 +70,23 @@
 
 
             </div>
-{#            <div class="recommend-bottom">#}
-{#                <div class="recommend-item">#}
-{#                    <a href="#"><img src="../static/temporary-img/recommended-left.jpg"#}
-{#                                     class="img-fluid" alt=""></a>#}
-{#                </div>#}
+            <!--评论最多的两条博客-->
+            <div style="text-align: center" class="recommend-bottom">
+                {% for comm in comm_li %}
+                    {% for c in comm %}
+                        <div class="recommend-item">
+                        <a href="{% url 'home:detail' %}?art_id={{ c.id }}"><img src="{{ c.avatar.url }}"
+                                         class="img-fluid" alt=""></a>
+                            <a  href="{% url 'home:detail' %}?art_id={{ c.id }}">{{ c.sumary }}</a>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+{##}
 {#                <div class="recommend-item">#}
 {#                    <a href="#"><img src="../static/temporary-img/recommended-right.jpg"#}
 {#                                     class="img-fluid" alt=""></a>#}
 {#                </div>#}
-{#            </div>#}
+            </div>
 
         </div>
 

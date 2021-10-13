@@ -24,6 +24,21 @@ class ArticleCategory(models.Model):
         verbose_name_plural = verbose_name
 
 
+class Advertising(models.Model):
+    title = models.CharField(max_length=100, blank=True)
+    advertis = models.ImageField(upload_to='advertis/%Y%m%d/', blank=True)
+    create_time = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.title
+    # 配置生成的表参数
+
+    class Meta:
+        db_table = 'tb_advertising'  # 指定生成的表名
+        verbose_name = '广告管理'  # admin站点显示
+        verbose_name_plural = verbose_name
+
+
 class Article(models.Model):
     # 作者
     # 参数on_delete就是当user表中的数据删除之后，文章信息也同步删除

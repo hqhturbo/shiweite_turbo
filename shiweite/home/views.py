@@ -2,6 +2,7 @@ from django.shortcuts import *
 from django.views import View
 from home.models import *
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger #导入django分页插件
+from django.db.models import Count
 import json
 # Create your views here.
 # 主页
@@ -32,7 +33,26 @@ class IndexView(View):
         hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
         # 2-3、最新文章
         new_arts = Article.objects.order_by('-create_time')[:3]
-        new_a = Article.objects.order_by('-create_time')[:1]
+        one_arts = []
+        for n in new_arts:
+            one_arts.append(n.id)
+        one_arts.sort()
+        arts_max = one_arts[len(one_arts)-1]
+
+        # 广告轮播图
+        advertis = Advertising.objects.all().order_by('?')[:3]
+        adver_id = []
+        for adver in advertis:
+            adver_id.append(adver.id)
+        adver_id.sort()
+        adver_min = adver_id[0]
+        # 查询评论最多的两条数据 通过article_id分类查询 进行降序排序 保留前两天
+        comments = Comment.objects.all().values('article_id').annotate(artic_id=Count('article_id')).order_by('-artic_id')[:2]
+        comm_li=[]
+        for co in comments:
+            # 通过字典拿值条件查询找到博客数据
+            comm = Article.objects.filter(id=co['article_id'])
+            comm_li.append(comm)
 
         # if 'login_name' in request.COOKIES:
         #     login_name = request.COOKIES.get('login_name')
@@ -48,7 +68,10 @@ class IndexView(View):
             'cat_id':cat_id,
             'hot_tags': hot_tags,
             'new_arts': new_arts,
-            'new_a':new_a,
+            'advertis':advertis,
+            'adver_min':adver_min,
+            'arts_max':arts_max,
+            'comm_li':comm_li
             # 'username':username
         }
         resp = render(request, 'index.html',context=context)
@@ -71,6 +94,8 @@ class DetailView(View):
         # 2-1、浏览量的简单做法：只要被查询一次，那么就算一次访问
         art.total_views += 1
         art.save()
+        corrtags = Article.objects.filter(tags=art.tags).order_by('?')[:3]
+        print(corrtags)
         # 2-2、重新查询文章信息，按照浏览量降序排序（热门标签）
         hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
         # 2-3、最新文章
@@ -83,7 +108,8 @@ class DetailView(View):
             'article': art,
             'hot_tags': hot_tags,
             'new_arts': new_arts,
-            'comms':comm
+            'comms':comm,
+            'corrtags':corrtags
         }
         return render(req,'details.html',context=context)
     def post(self,req):
