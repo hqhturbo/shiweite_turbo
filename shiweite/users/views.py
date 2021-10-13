@@ -206,13 +206,13 @@ class LoginView(View):
         if remember != 'on':  # 用户未勾选
             req.session.set_expiry(0)  # 当浏览器关闭后清空session
             resp.set_cookie('is_login', True)
-            # resp.set_cookie('login_name', username)
-            resp.set_cookie('login_name', return_user.username)
+            username = json.dumps(return_user.username)
+            resp.set_cookie('login_name', username)
         else:  # 用户勾选
             req.session.set_expiry(None)  # 设置session的过期时间为默认值。这个默认值是2周
             resp.set_cookie('is_login', True, max_age=14 * 24 * 3600)
-            # resp.set_cookie('login_name', username, max_age=14 * 24 * 3600)
-            resp.set_cookie('login_name', return_user.username, max_age=14 * 24 * 3600)
+            username = json.dumps(return_user.username)
+            resp.set_cookie('login_name', username, max_age=14 * 24 * 3600)
         # 6、设置cookie信息，为首页显示服务
         return resp
 
@@ -383,10 +383,9 @@ class UserCenterView(LoginRequiredMixin,View):
             })
         # 3、更新cookie中的username
         # 4、刷新当前页面（重定向）
-        # username=json.dumps(userinfo.username)
+        username=json.dumps(userinfo.username)
         resp = redirect(reverse('users:usercenter'))
-        # resp.set_cookie('login_name',username)
-        resp.set_cookie('login_name',userinfo.username)
+        resp.set_cookie('login_name',username)
         # 5、返回相应
         return resp
 

@@ -30,14 +30,6 @@ class IndexView(View):
             list = pages.page(1) #如果用户输入的页面不是整数时，显示第1页的内容
         # 组织数据传递给模板
 
-        hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
-        # 2-3、最新文章
-        new_arts = Article.objects.order_by('-create_time')[:3]
-        one_arts = []
-        for n in new_arts:
-            one_arts.append(n.id)
-        one_arts.sort()
-        arts_max = one_arts[len(one_arts)-1]
 
         # 广告轮播图
         advertis = Advertising.objects.all().order_by('?')[:3]
@@ -66,13 +58,9 @@ class IndexView(View):
             'category':category,
             'articles':list,
             'cat_id':cat_id,
-            'hot_tags': hot_tags,
-            'new_arts': new_arts,
             'advertis':advertis,
             'adver_min':adver_min,
-            'arts_max':arts_max,
             'comm_li':comm_li
-            # 'username':username
         }
         resp = render(request, 'index.html',context=context)
         resp.set_cookie('cat_id',cat_id)
@@ -96,18 +84,12 @@ class DetailView(View):
         art.save()
         corrtags = Article.objects.filter(tags=art.tags).order_by('?')[:3]
         print(corrtags)
-        # 2-2、重新查询文章信息，按照浏览量降序排序（热门标签）
-        hot_tags = Article.objects.values('tags').order_by('-total_views').distinct()[:9]
-        # 2-3、最新文章
-        new_arts = Article.objects.order_by('-create_time')[:3]
         # 2-4、获取所有评论信息
         comm = Comment.objects.filter(article=art).order_by('-created_time')
         # 3、返回页面
         context = {
             'categories':categories,
             'article': art,
-            'hot_tags': hot_tags,
-            'new_arts': new_arts,
             'comms':comm,
             'corrtags':corrtags
         }
