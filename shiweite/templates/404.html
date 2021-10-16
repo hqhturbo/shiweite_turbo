@@ -24,9 +24,14 @@
 		<div class="notfound">
 			<div class="notfound-404">
 				<h1>404</h1>
-				<h2>抱歉！找不到页面</h2>
-                <h3>{{ context }}</h3>
+                {% if context != '' %}
+                    <h2>{{ context }}</h2>
+                {% else %}
+                    <h2>抱歉！找不到页面</h2>
+                {% endif %}
+
 			</div>
+            <br><br>
 			<a href="/">返回首页</a>
 		</div>
 	</div>

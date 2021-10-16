@@ -9,7 +9,7 @@
         <div class="recommend-index">
             <div class="recommend-top">
 
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -36,24 +36,24 @@
                         {% endfor %}
                     </div>
                     {#                                    轮播广告位 空#}
-{#                    <div class="carousel-inner">#}
-{#                        <div class="carousel-item active">#}
-{#                            <a href="{{ first_banner.link_url }}">#}
-{#                                <img class="d-block w-100" src="{{ first_banner.img.url }}"#}
-{#                                     alt="">#}
-{#                            </a>#}
-{##}
-{#                        </div>#}
-{#                        {% for item in surplus_banners %}#}
-{#                            <div class="carousel-item">#}
-{#                                <a href="{{ item.link_url }}">#}
-{#                                    <img class="d-block w-100" src="{{ item.img.url }}"#}
-{#                                         alt="">#}
-{#                                </a>#}
-{##}
-{#                            </div>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
+                    {#                    <div class="carousel-inner">#}
+                    {#                        <div class="carousel-item active">#}
+                    {#                            <a href="{{ first_banner.link_url }}">#}
+                    {#                                <img class="d-block w-100" src="{{ first_banner.img.url }}"#}
+                    {#                                     alt="">#}
+                    {#                            </a>#}
+                    {##}
+                    {#                        </div>#}
+                    {#                        {% for item in surplus_banners %}#}
+                    {#                            <div class="carousel-item">#}
+                    {#                                <a href="{{ item.link_url }}">#}
+                    {#                                    <img class="d-block w-100" src="{{ item.img.url }}"#}
+                    {#                                         alt="">#}
+                    {#                                </a>#}
+                    {##}
+                    {#                            </div>#}
+                    {#                        {% endfor %}#}
+                    {#                    </div>#}
 
 
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
@@ -71,21 +71,22 @@
 
             </div>
             <!--评论最多的两条博客-->
+            <h4 style="margin-top: -25px" class="right-card-title">热门文章</h4>
             <div style="text-align: center" class="recommend-bottom">
                 {% for comm in comm_li %}
                     {% for c in comm %}
                         <div class="recommend-item">
-                        <a href="{% url 'home:detail' %}?art_id={{ c.id }}"><img src="{{ c.avatar.url }}"
-                                         class="img-fluid" alt=""></a>
-                            <a  href="{% url 'home:detail' %}?art_id={{ c.id }}">{{ c.sumary }}</a>
+                            <a href="{% url 'home:detail' %}?art_id={{ c.id }}" data-toggle="tooltip" data-placement="top" title={{ c.sumary }}><img src="{{ c.avatar.url }}"
+                                                                                     class="img-fluid" alt=""></a>
+{#                            <a href="{% url 'home:detail' %}?art_id={{ c.id }}">{{ c.sumary }}</a>#}
                         </div>
                     {% endfor %}
                 {% endfor %}
-{##}
-{#                <div class="recommend-item">#}
-{#                    <a href="#"><img src="../static/temporary-img/recommended-right.jpg"#}
-{#                                     class="img-fluid" alt=""></a>#}
-{#                </div>#}
+                {##}
+                {#                <div class="recommend-item">#}
+                {#                    <a href="#"><img src="../static/temporary-img/recommended-right.jpg"#}
+                {#                                     class="img-fluid" alt=""></a>#}
+                {#                </div>#}
             </div>
 
         </div>

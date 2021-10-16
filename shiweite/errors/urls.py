@@ -11,5 +11,6 @@
 """
 from errors.views import *
 
-handler404 = page_not_found
+handler404 = page_not_found404
+handler500 = page_not_found500
 urlpatterns=[]

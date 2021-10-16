@@ -15,7 +15,7 @@
     <div class="header-content container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="index.html">
-                <img src="../static/img/logo.jpg" width="144" height="72" alt="">
+                <img src="../static/img/turbo.jpg" width="75" height="75" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
                     <!-- 如果用户已经登录，则显示用户名下拉框 -->
                     <li class="nav-item dropdown" v-if="is_login">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="show_menu_click">[[username]]</a>
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="show_menu_click">{{username}}</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="display: block"
                              v-show="show_menu">
                             <a class="dropdown-item" href="{% url 'users:writeblog' %}">写文章 </a>

@@ -11,8 +11,8 @@
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'highlight/styles/railscasts.css' %}">
     <style>
-        .class1{
-            font-family:华文行楷;
+        .class1 {
+            font-family: 华文行楷;
             font-size: 45px;
             color: #8b98ab;
         }
@@ -20,18 +20,18 @@
 </head>
 <body>
 <div id="app">
-{#    导航栏    navdar navbar-expand-lg navbar-light#}
-    <div class="cl-header container-fluid" >
-    <div class="header-content container">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="index.html">
-                <img src="../static/img/lhr.jpg" width="75" height="75" alt="">
-            </a><span class="class1">筱宸</span>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    {#    导航栏    navdar navbar-expand-lg navbar-light#}
+    <div class="cl-header container-fluid">
+        <div class="header-content container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="/">
+                    <img src="../static/img/lhr.jpg" width="75" height="75" alt="">
+                </a><span class="class1">筱宸</span>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         {% for cat in categories %}
                             {% if cat.id == category.id %}
@@ -52,12 +52,14 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{% url 'users:writeblog' %}">写文章</a>
                                 <a class="dropdown-item" href="{% url 'users:usercenter' %}">个人信息</a>
+                                <a class="dropdown-item" href="{% url 'users:allblog' %}">全部博客</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'users:logout' %}">退出</a>
                             </div>
                         </li>
                         <li class="nav-item" v-else>
-                            <span class="nav-link"><a href="{% url 'users:login' %}" >登录</a>/<a  href="{% url 'users:register' %}">注册</a></span>
+                            <span class="nav-link"><a href="{% url 'users:login' %}">登录</a>/<a
+                                    href="{% url 'users:register' %}">注册</a></span>
                         </li>
                     </ul>
                 </div>
@@ -68,20 +70,21 @@
 {#内容#}
 <div class="cl-cantainer container">
     <div class="row">
-{#        内容左侧#}
+        {#        内容左侧#}
         {% block content_left %}
 
         {% endblock %}
-{#    内容右侧#}
+        {#    内容右侧#}
         <div class="col-md-3 cl-right">
             <div class="right-card">
 
                 <div class="right-card-main">
-                    <div style="font-family: Forte;font-size: 40px;text-align: center " class="right-card-title">turbo</div>
+                    <div style="font-family: Forte;font-size: 40px;text-align: center " class="right-card-title">turbo
+                    </div>
                     <div style="font-family: 方正舒体;font-size: 45px" class="cl-code">
-                        <p>刘</p>
-                        <p>昊</p>
-                        <p>然</p>
+                        <p>心&nbsp;之&nbsp;所&nbsp;向</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                        <p>不&nbsp;负&nbsp;热&nbsp;爱</p>
                     </div>
                 </div>
             </div>
@@ -89,51 +92,55 @@
             <div class="right-card">
                 <div class="right-card-main">
                     <div class="right-card-title">最新文章</div>
-                        {% for new_art in new_arts %}
-                            {% if new_art.id == arts_max %}
-                                <div class="right-recommended"><a href="{% url 'home:detail' %}?art_id={{ new_art.id }}"><img src="{{ new_art.avatar.url }}" class="img-fluid" alt=""></a></div>
-                            {% endif %}
-                        {% endfor %}
+                    {% for new_art in new_arts %}
+                        {% if new_art.id == arts_max %}
+                            <div class="right-recommended"><a
+                                    href="{% url 'home:detail' %}?art_id={{ new_art.id }}"><img
+                                    src="{{ new_art.avatar.url }}" class="img-fluid" alt=""></a></div>
+                        {% endif %}
+                    {% endfor %}
 
                     <ul class="right-recommended-list">
 
                         {% for new_art in new_arts %}
                             <li><a href="{% url 'home:detail' %}?art_id={{ new_art.id }}"><i class="fa fa-angle-right"
-                                                                                            aria-hidden="true"></i>{{ new_art.title }}</a></li>
+                                                                                             aria-hidden="true"></i>{{ new_art.title }}
+                            </a></li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
 
             <div class="right-card">
-                <div class="right-card-title">热门标签</div>
-                <ul class="label">
-                    {% for hot_tag in hot_tags %}
-                        <li><a href="#">{{ hot_tag.tags }}</a></li>
-                    {% endfor %}
-                </ul>
+                <div class="right-card-main">
+                    <div class="right-card-title">热门标签</div>
+                    <ul class="label">
+                        {% for hot_tag in hot_tags %}
+                            <li><a href="#">{{ hot_tag.tags }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="container-fluid cl-footer">
-    <div class="container">
-        <p class="cl-copyright">本设计由然 ● 工作室荣誉出品</p>
-        <p class="cl-copyright">turbo @ 2021 & 联系我们：hui20010207@163.com </p>
+    <div class="container-fluid cl-footer">
+        <div class="container">
+            <p class="cl-copyright">本设计由然 ● 工作室荣誉出品</p>
+            <p class="cl-copyright">turbo @ 2021 & 联系我们：hui20010207@163.com </p>
+        </div>
+
     </div>
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'highlight/highlight.pack.js' %}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    {% block js %}
 
-</div>
-<script src="{% static 'jquery/jquery.min.js' %}"></script>
-<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'highlight/highlight.pack.js' %}"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-{% block js %}
-
-{% endblock %}
-<script src="{% static 'js/common.js' %}"></script>
-<script src="{% static 'js/host.js' %}"></script>
-<script src="{% static 'vue/vue-2.5.16.js' %}"></script>
-<script src="{% static 'vue/axios-0.18.0.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    {% endblock %}
+    <script src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/host.js' %}"></script>
+    <script src="{% static 'vue/vue-2.5.16.js' %}"></script>
+    <script src="{% static 'vue/axios-0.18.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
 </body>
 </html>

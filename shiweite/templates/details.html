@@ -13,7 +13,7 @@
                     <div class="cl-artical-content">
                         <h2 class="cl-artical-title">{{ article.title }}</h2>
                         <div class="cl-card-tag">
-                            <div><span>作者：{{ article.author }}</span></div>
+                            <div><span>作者：<a data-toggle="tooltip" data-placement="top" title='查看该作者的全部博客' href="{% url 'users:personalblog' %}?per_id={{ article.author_id }}">{{ article.author.username }}</a></span></div>
                             <div><span>{{ article.total_views }}</span>人浏览 / <span>{{ article.comments_count }}</span>人评论
                             </div>
                             <div><span>发布时间：{{ article.create_time }}</span></div>
@@ -24,21 +24,26 @@
                         </div>
                     </div>
 
-                    相关文章
+
                     <div class="recommend-panel">
                         <h4 class="right-card-title">相关文章</h4>
                         <div class="card-deck">
+
                             {% for corrtag in corrtags %}
-                                <div class="card ll-panel">
-                                    <a class="recommend-panel-link" href="{% url 'home:detail' %}?art_id={{ corrtag.id }}">
-                                        <div class="recommend-panel-top">
-                                            <img src="{{ corrtag.avatar.url }}" class="img-fluid" alt="">
-                                        </div>
-                                        <div class="recommend-panel-bottom">
-                                            {{ corrtag.sumary }}
-                                        </div>
-                                    </a>
-                                </div>
+                                {% if corrtag.id != article.id %}
+                                    <div class="card ll-panel">
+                                        <a class="recommend-panel-link"
+                                           href="{% url 'home:detail' %}?art_id={{ corrtag.id }}">
+                                            <div class="recommend-panel-top">
+                                                <img src="{{ corrtag.avatar.url }}" class="img-fluid" alt="">
+                                            </div>
+                                            <div class="recommend-panel-bottom">
+                                                {{ corrtag.sumary }}
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endif %}
+
                             {% endfor %}
                         </div>
                     </div>
@@ -47,8 +52,8 @@
                         <form class="cl-comment-from" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="art_id" value="{{ article.id }}">
-                            <div><textarea placeholder="说点什么吧..." rows="5" name="content"></textarea></div>
-                            <button type="submit">留言</button>
+                            <div><textarea placeholder="目前还不能评论哦QAQ！！！" rows="5" name="content"></textarea></div>
+                            <button type="submit" disabled>留言</button>
                             <span class="clearfix"></span>
                         </form>
 

@@ -19,7 +19,7 @@ class IndexView(View):
             return HttpResponseRedirect('此分类信息不存在')
         # 4、获取分页参数
         page_index = request.GET.get('page_index',1) #页码
-        page_size = request.GET.get('page_size',2) #页容量
+        page_size = request.GET.get('page_size',4) #页容量
         # 5、根据分类信息查询该分类下的所有文章数据
         articles = Article.objects.filter(category=category)
         # 6、创建分页器
@@ -83,10 +83,10 @@ class DetailView(View):
         art.total_views += 1
         art.save()
         corrtags = Article.objects.filter(tags=art.tags).order_by('?')[:3]
-        print(corrtags)
         # 2-4、获取所有评论信息
         comm = Comment.objects.filter(article=art).order_by('-created_time')
         # 3、返回页面
+        # print('jjj',art.author.username)
         context = {
             'categories':categories,
             'article': art,

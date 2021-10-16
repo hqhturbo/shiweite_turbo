@@ -12,6 +12,7 @@ from django.contrib.auth import *
 from home.models import ArticleCategory,Article
 from django.contrib.auth.mixins import LoginRequiredMixin
 from shiweite.settings import BASE_DIR,MEDIA_URL
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger #导入django分页插件
 '''
     LoginRequiredMixin使用方法：
     1、待验证的视图需要继承该类即可，它会自动验证身份信息
@@ -370,6 +371,14 @@ class UserCenterView(LoginRequiredMixin,View):
         #         data = {'state': 0}
         #         return JsonResponse(data)
         #
+        username_all = User.objects.values('username')
+        print(username_all)
+        for user in username_all:
+            if user['username'] == username:
+                return render(req,'404.html',{
+                    'context':'用户名已存在，请重新填写'
+                })
+
         try:
             userinfo.username = username
             userinfo.user_desc = user_desc
@@ -464,3 +473,47 @@ class WriteBlogView(LoginRequiredMixin,View):
             })
             # 4、跳转到指定页面
         return redirect(reverse('home:index'))
+
+# 个人全部博客视图
+class AllblogView(View):
+    def get(self,req):
+        if 'login_name' in req.COOKIES:
+            username = req.COOKIES.get('login_name')
+            username = json.loads(username)
+        else:
+            username = ''
+        # page_index = req.GET.get('page_index', 1)  # 页码
+        # page_size = req.GET.get('page_size', 8)  # 页容量
+        user = User.objects.filter(username=username).first()
+        all_blog = Article.objects.filter(author_id=user.id).all()
+        # pages = Paginator(all_blog, page_size)  # 对查询到的数据对象articles进行分页，设置超过指定页容量就分页
+        # try:
+        #     list = pages.page(page_index)  # 获取当前页面的记录
+        # except PageNotAnInteger:
+        #     list = pages.page(1)  # 如果用户输入的页面不是整数时，显示第1页的内容
+        print(all_blog)
+        if all_blog.count() == 0:
+            return render(req, 'allblog.html', {
+                'context': '您还没有发布博客哦!!!快去发布吧^_^',
+            })
+        else:
+            return render(req,'allblog.html',{
+            'all_blog':all_blog,
+        })
+
+# 查询他人全部博客视图
+class PersonalblogView(View):
+    def get(self,req):
+        per_id = req.GET.get('per_id')
+        # page_index = req.GET.get('page_index', 1)  # 页码
+        # page_size = req.GET.get('page_size', 8)  # 页容量
+        per_blog = Article.objects.filter(author_id=per_id).all()
+        # pages = Paginator(per_blog, page_size)  # 对查询到的数据对象articles进行分页，设置超过指定页容量就分页
+        # try:
+        #     list = pages.page(page_index)  # 获取当前页面的记录
+        # except PageNotAnInteger:
+        #     list = pages.page(1)  # 如果用户输入的页面不是整数时，显示第1页的内容
+        # print(list)
+        return render(req, 'allblog.html', {
+            'all_blog': per_blog,
+        })
