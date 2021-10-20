@@ -482,6 +482,7 @@ class AllblogView(View):
             username = json.loads(username)
         else:
             username = ''
+        categories = ArticleCategory.objects.all()
         # page_index = req.GET.get('page_index', 1)  # 页码
         # page_size = req.GET.get('page_size', 8)  # 页容量
         user = User.objects.filter(username=username).first()
@@ -499,6 +500,7 @@ class AllblogView(View):
         else:
             return render(req,'allblog.html',{
             'all_blog':all_blog,
+            'categories':categories
         })
 
 # 查询他人全部博客视图
@@ -508,6 +510,7 @@ class PersonalblogView(View):
         # page_index = req.GET.get('page_index', 1)  # 页码
         # page_size = req.GET.get('page_size', 8)  # 页容量
         per_blog = Article.objects.filter(author_id=per_id).all()
+        categories = ArticleCategory.objects.all()
         # pages = Paginator(per_blog, page_size)  # 对查询到的数据对象articles进行分页，设置超过指定页容量就分页
         # try:
         #     list = pages.page(page_index)  # 获取当前页面的记录
@@ -516,4 +519,5 @@ class PersonalblogView(View):
         # print(list)
         return render(req, 'allblog.html', {
             'all_blog': per_blog,
+            'categories':categories
         })
